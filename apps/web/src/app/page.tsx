@@ -1,5 +1,9 @@
 import { API_URL } from "@/lib/api";
-import { ProductList } from "@/components/ProductList";
+import { ProductCard } from "@/components/ProductCard";
+import { ContainerScroll } from "@/components/ContainerScroll";
+import { PanelVisual } from "@/components/PanelVisual";
+import { Navbar, HeroTitle, AmbientBlobs } from "@/components/Nav";
+import { Footer } from "@/components/Footer";
 import type { Product } from "@/lib/types";
 
 async function getProducts(): Promise<Product[]> {
@@ -8,19 +12,30 @@ async function getProducts(): Promise<Product[]> {
   return res.json();
 }
 
-export default async function Home() {
+export default async function HomePage() {
   const products = await getProducts();
 
   return (
-    <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-10">
-      <h1 className="mb-6 text-2xl font-semibold tracking-tight">Products</h1>
-      {products.length === 0 ? (
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          No products yet — run <code>pnpm seed</code> in apps/api.
-        </p>
-      ) : (
-        <ProductList products={products} />
-      )}
+    <main className="relative min-h-screen overflow-hidden bg-ink text-cloud">
+      <AmbientBlobs />
+      <Navbar />
+      <ContainerScroll titleComponent={<HeroTitle />}>
+        <PanelVisual />
+      </ContainerScroll>
+      <section className="mx-auto max-w-[1120px] px-6 pb-[100px] pt-5">
+        {products.length === 0 ? (
+          <p className="text-sm text-muted">
+            No products yet — run <code className="font-mono">pnpm seed</code> in apps/api.
+          </p>
+        ) : (
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-[22px]">
+            {products.map((p, i) => (
+              <ProductCard key={p.id} product={p} index={i} />
+            ))}
+          </div>
+        )}
+      </section>
+      <Footer />
     </main>
   );
 }

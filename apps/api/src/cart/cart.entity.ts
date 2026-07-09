@@ -10,6 +10,7 @@ import { CartItem } from './cart-item.entity';
 export enum CartStatus {
   OPEN = 'open',
   CONVERTED = 'converted',
+  EXPIRED = 'expired',
 }
 
 @Entity()

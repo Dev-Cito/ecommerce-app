@@ -51,6 +51,12 @@ export class WebhooksController {
       if (cartId) {
         await this.orders.fulfill(cartId, session);
       }
+    } else if (event.type === 'checkout.session.expired') {
+      const session = event.data.object;
+      const cartId = session.metadata?.cartId;
+      if (cartId) {
+        await this.orders.expireCart(cartId);
+      }
     }
 
     return { received: true };

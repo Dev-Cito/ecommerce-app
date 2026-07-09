@@ -30,6 +30,110 @@ const CATALOG = [
       { name: 'Black', sku: 'MUG-BLK', priceCents: 990, stock: 200 },
     ],
   },
+  {
+    name: 'Zip Hoodie',
+    description: 'Heavyweight zip hoodie',
+    variants: [
+      { name: 'S / Black', sku: 'HOOD-S-BLK', priceCents: 4990, stock: 50 },
+      { name: 'M / Black', sku: 'HOOD-M-BLK', priceCents: 4990, stock: 50 },
+      { name: 'L / Black', sku: 'HOOD-L-BLK', priceCents: 4990, stock: 50 },
+    ],
+  },
+  {
+    name: 'Snapback Cap',
+    description: 'Structured 6-panel snapback',
+    variants: [
+      { name: 'One Size', sku: 'CAP-OS', priceCents: 2490, stock: 50 },
+    ],
+  },
+  {
+    name: 'Sticker Pack',
+    description: 'Die-cut vinyl stickers',
+    variants: [
+      { name: 'Pack of 10', sku: 'STK-10PK', priceCents: 690, stock: 50 },
+    ],
+  },
+  {
+    name: 'Enamel Water Bottle',
+    description: '500ml enamel-coated steel bottle',
+    variants: [
+      {
+        name: '500ml / Violet',
+        sku: 'BOTTLE-500-VIO',
+        priceCents: 1990,
+        stock: 50,
+      },
+      {
+        name: '500ml / Cyan',
+        sku: 'BOTTLE-500-CYA',
+        priceCents: 1990,
+        stock: 50,
+      },
+    ],
+  },
+  {
+    name: 'Desk Mat',
+    description: 'Stitched-edge desk mat',
+    variants: [
+      { name: 'Medium', sku: 'DESKMAT-M', priceCents: 2990, stock: 50 },
+      { name: 'XL', sku: 'DESKMAT-XL', priceCents: 3490, stock: 50 },
+    ],
+  },
+  {
+    name: 'Laptop Sleeve',
+    description: 'Padded neoprene laptop sleeve',
+    variants: [
+      { name: '13"', sku: 'SLEEVE-13', priceCents: 3290, stock: 50 },
+      { name: '15"', sku: 'SLEEVE-15', priceCents: 3290, stock: 50 },
+    ],
+  },
+  {
+    name: 'Wireless Headphones',
+    description: 'Active noise-cancelling headphones',
+    variants: [
+      { name: 'Violet', sku: 'HEADPH-VIO', priceCents: 5990, stock: 50 },
+      { name: 'Cyan', sku: 'HEADPH-CYA', priceCents: 5990, stock: 50 },
+    ],
+  },
+  {
+    name: 'Mechanical Keyboard',
+    description: 'Hot-swappable mechanical keyboard',
+    variants: [
+      { name: 'Brown switch', sku: 'KB-BROWN', priceCents: 8990, stock: 50 },
+      { name: 'Red switch', sku: 'KB-RED', priceCents: 8990, stock: 50 },
+    ],
+  },
+  {
+    name: 'Wireless Mouse',
+    description: 'Ergonomic wireless mouse',
+    variants: [
+      { name: 'One Size', sku: 'MOUSE-OS', priceCents: 3490, stock: 50 },
+    ],
+  },
+  {
+    name: 'Everyday Backpack',
+    description: 'Weatherproof everyday backpack',
+    variants: [
+      { name: 'Black', sku: 'BKPK-BLK', priceCents: 6490, stock: 50 },
+      { name: 'Navy', sku: 'BKPK-NVY', priceCents: 6490, stock: 50 },
+    ],
+  },
+  {
+    name: 'Desk Lamp',
+    description: 'Dimmable LED desk lamp',
+    variants: [
+      { name: 'White', sku: 'LAMP-WHT', priceCents: 4290, stock: 50 },
+      { name: 'Black', sku: 'LAMP-BLK', priceCents: 4290, stock: 50 },
+    ],
+  },
+  {
+    name: 'Braided USB-C Cable',
+    description: 'Braided USB-C charging cable',
+    variants: [
+      { name: '1m', sku: 'CABLE-1M', priceCents: 1290, stock: 50 },
+      { name: '2m', sku: 'CABLE-2M', priceCents: 1490, stock: 50 },
+    ],
+  },
 ];
 
 async function seed() {

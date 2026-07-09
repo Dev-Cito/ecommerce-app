@@ -21,7 +21,7 @@ export class CheckoutService {
       );
     }
 
-    const frontUrl = this.config.getOrThrow<string>('FRONT_URL');
+    const frontendUrl = this.config.getOrThrow<string>('FRONTEND_URL');
 
     const session = await this.stripe.client.checkout.sessions.create({
       mode: 'payment',
@@ -33,8 +33,8 @@ export class CheckoutService {
         },
         quantity: item.quantity,
       })),
-      success_url: `${frontUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${frontUrl}/cart`,
+      success_url: `${frontendUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${frontendUrl}/checkout/cancel`,
       // essential: the webhook only ever sees the Stripe session, this is how it finds the cart to fulfill
       metadata: { cartId: cart.id },
     });

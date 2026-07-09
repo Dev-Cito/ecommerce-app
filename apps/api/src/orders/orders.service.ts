@@ -49,9 +49,9 @@ export class OrdersService {
         return null;
       }
 
-      if (cart.status === CartStatus.CONVERTED) {
+      if (cart.status !== CartStatus.OPEN) {
         this.logger.warn(
-          `Cart ${cartId} already converted, ignoring duplicate webhook`,
+          `Cart ${cartId} is already ${cart.status}, ignoring duplicate webhook`,
         );
         return null;
       }
@@ -102,5 +102,35 @@ export class OrdersService {
         throw err;
       }
     });
+  }
+
+  /**
+   * Marks an abandoned checkout's cart as expired. Only touches carts still
+   * OPEN — if the cart was already converted (payment succeeded in a race
+   * with this event) or already expired (duplicate webhook), this is a no-op.
+   */
+  async expireCart(cartId: string): Promise<void> {
+    const carts = this.dataSource.getRepository(Cart);
+    const cart = await carts.findOne({ where: { id: cartId } });
+
+    if (!cart) {
+      this.logger.warn(
+        `Webhook for expired session references unknown cart ${cartId}`,
+      );
+      return;
+    }
+
+    if (cart.status !== CartStatus.OPEN) {
+      this.logger.log(
+        `Cart ${cartId} is already ${cart.status}, ignoring expiry webhook`,
+      );
+      return;
+    }
+
+    cart.status = CartStatus.EXPIRED;
+    await carts.save(cart);
+    this.logger.log(
+      `Cart ${cartId} marked expired (checkout session abandoned)`,
+    );
   }
 }
