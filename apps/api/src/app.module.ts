@@ -19,7 +19,15 @@ import { WebhooksModule } from './webhooks/webhooks.module';
         type: 'postgres',
         url: config.getOrThrow('DATABASE_URL'),
         autoLoadEntities: true,
-        synchronize: config.get('NODE_ENV') !== 'production',
+        synchronize: true,
+        // Supabase (and most managed Postgres providers) require SSL, but the
+        // chain they present isn't verifiable by Node's default CA store —
+        // rejectUnauthorized: false is the standard workaround. Local Docker
+        // Postgres has no SSL at all, so this is opt-in via env, not NODE_ENV.
+        ssl:
+          config.get('DATABASE_SSL') === 'true'
+            ? { rejectUnauthorized: false }
+            : false,
       }),
     }),
     ProductsModule,
