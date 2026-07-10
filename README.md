@@ -6,6 +6,16 @@ A full-stack e-commerce test storefront wired end-to-end with **Stripe Checkout*
 
 ---
 
+## 🔗 Live demo
+
+**▶️ [ku-isoko-shop.vercel.app](https://ku-isoko-shop.vercel.app)**
+
+The store runs in Stripe **test mode** — check out with the test card `4242 4242 4242 4242` (any future expiry, any CVC) to walk the full payment → webhook → fulfillment flow. No real charges.
+
+> The frontend is deployed on **Vercel** and the NestJS API on **Render** (free tier — the API may take ~30–60s to wake on the first request after a period of inactivity).
+
+---
+
 ## 📦 What's inside
 
 This is a **pnpm workspace monorepo** with two apps:
@@ -110,6 +120,7 @@ Open **http://localhost:3001**, add something to the cart, and check out with th
 | Variable | Description |
 |---|---|
 | `DATABASE_URL` | Postgres connection string |
+| `DATABASE_SSL` | `true` for managed Postgres (e.g. Supabase) that requires SSL; `false` for local Docker |
 | `STRIPE_SECRET_KEY` | Stripe secret key (`sk_test_...` locally, `sk_live_...` in prod) |
 | `STRIPE_WEBHOOK_SECRET` | Webhook signing secret — from `stripe listen` locally, from the Stripe Dashboard in prod |
 | `FRONTEND_URL` | The storefront's origin — used for CORS and Checkout Session `success_url`/`cancel_url` |
@@ -138,24 +149,29 @@ Open **http://localhost:3001**, add something to the cart, and check out with th
 
 ## ☁️ Deploying
 
-This app is set up to deploy as **API → Render**, **Web → Vercel**.
+This app is deployed as **API → Render**, **Web → Vercel**, with **PostgreSQL on Supabase**.
 
 ### API (Render)
 
-1. Create a **Web Service** pointed at `apps/api`, build command `pnpm build`, start command `pnpm start:prod`.
-2. Set the environment variables from the table above — use your **live** or a fresh **test** Stripe secret key, and set `FRONTEND_URL` to your deployed Vercel domain.
-3. Render binds to `PORT` on `0.0.0.0` automatically — already handled in `main.ts`.
+1. Create a **Web Service** pointed at `apps/api`, build command `pnpm install && pnpm build`, start command `pnpm start:prod`.
+2. Set the environment variables from the table above — use a fresh **test** (or **live**) Stripe secret key, set `FRONTEND_URL` to your deployed Vercel domain, and `DATABASE_SSL=true` for Supabase.
+3. Set `PORT` explicitly (e.g. `10000`); the API listens on `process.env.PORT` bound to `0.0.0.0` — already handled in `main.ts`.
 
 ### Web (Vercel)
 
 1. Import the repo, set the project root to `apps/web`.
 2. Set `NEXT_PUBLIC_API_URL` to your deployed Render API URL.
 
+### Database (Supabase)
+
+- Create a Supabase project and use its **connection pooler** string as `DATABASE_URL`.
+- The schema is generated from the TypeORM entities; the app runs with `synchronize` off in production, so create the schema and seed once against the Supabase database before going live.
+
 ### 🪝 Don't forget the production webhook
 
 `stripe listen` only works locally. Once the API is deployed:
 
-1. Stripe Dashboard → **Developers → Webhooks → Add endpoint**.
+1. Stripe Dashboard → **Developers → Webhooks → Add endpoint** (in **test mode**).
 2. Point it at `https://<your-api>.onrender.com/webhooks/stripe`.
 3. Select at least `checkout.session.completed` and `checkout.session.expired`.
 4. Copy the **new** signing secret Stripe gives you into Render's `STRIPE_WEBHOOK_SECRET` — it's different from any local `whsec_...` you've used so far.
